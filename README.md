@@ -5,7 +5,7 @@ GenFFI - is an FFI generator that takes the C Headers and converts them to the t
 
 Supported languages:
 * Lua
-* Mono
+* C# (Mono)
 
 Usage:
 ```

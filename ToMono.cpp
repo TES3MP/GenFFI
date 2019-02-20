@@ -42,13 +42,16 @@ static std::string CTypeToMono(const Parser &data, CXType type)
         {
             CXType popinteeType = clang_getPointeeType(type);
             //bool isConst = clang_isConstQualifiedType(popinteeType);
-            if(popinteeType.kind == CXType_Char_S || popinteeType.kind == CXType_SChar)
+            if (popinteeType.kind == CXType_Char_S || popinteeType.kind == CXType_SChar)
                 return "string";
+            else
+                return "IntPtr";
+                //throw std::runtime_error("Pointer of \"" + GetCXXString(clang_getTypeSpelling(popinteeType)) + "\" not supported.");
         }
         case CXType_Typedef: // todo: not the best way.
         {
             std::string typeName = GetCXXString(clang_getTypeSpelling(type));
-            if(typeName == "bool") // since headers written on C, and bool type defined in C as uint_8, we need special handler for it
+            if (typeName == "bool") // since headers written on C, and bool type defined in C as uint_8, we need special handler for it
                 return "bool";
             return CTypeToMono(data, data.GetTypeDef(typeName));
         }

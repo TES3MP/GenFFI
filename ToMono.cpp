@@ -60,11 +60,19 @@ static std::string CTypeToMono(const Parser &data, CXType type)
     }
 }
 
+static std::string indent(int level)
+{
+    std::string out;
+    for (;level--;)
+        out += "    ";
+    return out;
+}
+
 std::ostream &ToMono::Serialize(std::ostream &out) const
 {
     out << "﻿using System.Runtime.InteropServices;\n\n"
         << "namespace " << parser.GetNamespace() << "\n{\n"
-        << "    public static partial class " << parser.GetModule() << "\n    {\n";
+        << indent(1) << "public static partial class " << parser.GetModule() << "\n" << indent(1) << "{\n";
 
     for (const auto &decl : parser.GetTokens())
     {
@@ -86,11 +94,11 @@ std::ostream &ToMono::Serialize(std::ostream &out) const
         ss << ");\n\n";
 
         if (haveStrings)
-            out << "        [DllImport(\"__Internal\", CharSet = CharSet.Ansi)]\n";
+            out << indent(2) << "[DllImport(\"__Internal\", CharSet = CharSet.Ansi)]\n";
         else
-            out << "        [DllImport(\"__Internal\"]\n";
-        out << "        " << ss.str();
+            out << indent(2) << "[DllImport(\"__Internal\"]\n";
+        out << indent(2) << ss.str();
     }
-    out << "    }\n}";
+    out << indent(1) << "}\n}";
     return out;
 }

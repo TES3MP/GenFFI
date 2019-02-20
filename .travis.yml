@@ -1,0 +1,49 @@
+language: cpp
+addons:
+  apt:
+    packages: [
+      cmake,
+      libclang-dev
+    ]
+  homebrew:
+    packages: [
+     cmake,
+     libclang-dev
+    ]
+
+matrix:
+  include:
+    - name: Test Xenial GCC-8
+      os: linux
+      env:
+        - MATRIX_CC="CC=gcc-8 && CXX=g++-8"
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-8
+      compiler: gcc
+      sudo: required
+      dist: xenial
+    - name: Test Xenial Clang-6
+      os: linux
+      env:
+        - MATRIX_CC="CC=clang-6.0 && CXX=clang++-6.0"
+      addons:
+        apt:
+          packages:
+            - clang-6.0
+      compiler: clang
+      sudo: required
+      dist: xenial
+    - name: Test macOS Clang
+      os: osx
+      sudo: required
+      osx_image: xcode10.1
+    - name: Windows
+      os: windows
+
+before_install: ./CI/before_install.sh
+before_script: ./CI/before_script.sh
+script: ./CI/script.sh
